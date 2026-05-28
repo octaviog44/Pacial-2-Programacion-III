@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.utn'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // Hibernate
+    implementation 'org.hibernate.orm:hibernate-core:6.4.4.Final'
+
+    // JPA
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+
+    // Base de datos H2
+    implementation 'com.h2database:h2:2.2.224'
+
+    // Tests
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+application {
+    mainClass = 'com.utn.Main'
+}
+
+test {
+    useJUnitPlatform()
+}

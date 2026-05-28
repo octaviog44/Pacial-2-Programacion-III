@@ -1,0 +1,32 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Base de datos H2
+*.mv.db
+*.trace.db
+
+# Java compilado
+*.class
+
+# Environment
+.env
