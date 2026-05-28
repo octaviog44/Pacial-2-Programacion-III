@@ -2,12 +2,12 @@ package com.utn;
 
 import com.utn.config.JPAUtil;
 import com.utn.entities.*;
+import com.utn.repositories.CategoriaRepository;
+import com.utn.repositories.ProductoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
@@ -19,10 +19,15 @@ public class Main {
 
         EntityTransaction tx = em.getTransaction();
 
+        CategoriaRepository categoriaRepository =
+                new CategoriaRepository(em);
+
+        ProductoRepository productoRepository =
+                new ProductoRepository(em);
+
         try {
 
             tx.begin();
-
 
             // CATEGORIAS
             Categoria bebidas = new Categoria();
@@ -34,9 +39,9 @@ public class Main {
             Categoria hamburguesas = new Categoria();
             hamburguesas.setNombre("Hamburguesas");
 
-            em.persist(bebidas);
-            em.persist(pizzas);
-            em.persist(hamburguesas);
+            categoriaRepository.guardar(bebidas);
+            categoriaRepository.guardar(pizzas);
+            categoriaRepository.guardar(hamburguesas);
 
             // PRODUCTOS
             Producto p1 = new Producto();
@@ -99,18 +104,17 @@ public class Main {
             p10.setStock(25);
             p10.setCategoria(bebidas);
 
-            em.persist(p1);
-            em.persist(p2);
-            em.persist(p3);
-            em.persist(p4);
-            em.persist(p5);
-            em.persist(p6);
-            em.persist(p7);
-            em.persist(p8);
-            em.persist(p9);
-            em.persist(p10);
+            productoRepository.guardar(p1);
+            productoRepository.guardar(p2);
+            productoRepository.guardar(p3);
+            productoRepository.guardar(p4);
+            productoRepository.guardar(p5);
+            productoRepository.guardar(p6);
+            productoRepository.guardar(p7);
+            productoRepository.guardar(p8);
+            productoRepository.guardar(p9);
+            productoRepository.guardar(p10);
 
-           
             // USUARIOS
             Usuario u1 = new Usuario();
             u1.setNombre("Octavio");
@@ -123,7 +127,6 @@ public class Main {
             em.persist(u1);
             em.persist(u2);
 
-            
             // PEDIDOS
             Pedido pedido1 = new Pedido();
             pedido1.setFecha(LocalDate.now());
@@ -179,14 +182,12 @@ public class Main {
             em.persist(d5);
             em.persist(d6);
 
-  
             // UPDATE
             p1.setPrecio(3000.0);
             p4.setStock(20);
 
-            em.merge(p1);
-            em.merge(p4);
-
+            productoRepository.guardar(p1);
+            productoRepository.guardar(p4);
 
             // BUSCAR POR ID
             Usuario usuarioBuscado = em.find(Usuario.class, u1.getId());
@@ -198,11 +199,11 @@ public class Main {
             try {
 
                 Usuario usuarioMail = em.createQuery(
-                "SELECT u FROM Usuario u WHERE u.email = :mail",
-              Usuario.class
-    )
-                            .setParameter("mail", "octa@gmail.com")
-                            .getSingleResult();
+                        "SELECT u FROM Usuario u WHERE u.email = :mail",
+                        Usuario.class
+                )
+                        .setParameter("mail", "octa@gmail.com")
+                        .getSingleResult();
 
                 System.out.println("BUSQUEDA POR MAIL");
                 System.out.println(usuarioMail);
@@ -210,37 +211,32 @@ public class Main {
             } catch (Exception e) {
 
                 System.out.println("No se encontró usuario con ese mail");
-}
+            }
 
+            // DELETE LOGICO
+            Producto productoEliminar = new Producto();
 
-            
-            // DELETE
+            productoEliminar.setNombre("Producto Temporal");
+            productoEliminar.setPrecio(1000.0);
+            productoEliminar.setStock(1);
+            productoEliminar.setCategoria(bebidas);
 
-Producto productoEliminar = new Producto();
+            productoRepository.guardar(productoEliminar);
 
-productoEliminar.setNombre("Producto Temporal");
-productoEliminar.setPrecio(1000.0);
-productoEliminar.setStock(1);
-productoEliminar.setCategoria(bebidas);
+            productoRepository.eliminarLogico(productoEliminar.getId());
 
-em.persist(productoEliminar);
+            tx.commit();
 
-// eliminar producto
-em.remove(productoEliminar);
+            System.out.println("TRANSACCION REALIZADA CON EXITO");
 
-tx.commit();
+        } catch (Exception e) {
 
-System.out.println("TRANSACCION REALIZADA CON EXITO");
+            tx.rollback();
+            e.printStackTrace();
 
-} catch (Exception e) {
+        } finally {
 
-    tx.rollback();
-    e.printStackTrace();
-
-} finally {
-
-    em.close();
-
-}
+            em.close();
+        }
     }
 }
