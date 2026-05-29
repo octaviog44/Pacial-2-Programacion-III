@@ -258,128 +258,201 @@ public class Main {
             System.out.println("\nTRANSACCION REALIZADA CON EXITO");
 
             // =========================
-            // MENU
-            // =========================
+// MENU PRINCIPAL
+// =========================
 
-            int opcion = -1;
+int opcionPrincipal;
+
+do {
+
+    System.out.println("\n===== MENU PRINCIPAL =====");
+    System.out.println("1 - Gestion de Categorias");
+    System.out.println("2 - Gestion de Productos");
+    System.out.println("3 - Reportes");
+    System.out.println("0 - Salir");
+    System.out.print("Ingrese una opcion: ");
+
+    opcionPrincipal = Integer.parseInt(sc.nextLine());
+
+    switch (opcionPrincipal) {
+
+        case 1:
+
+    int opcionCategoria;
+
+    do {
+
+        System.out.println("\n=== GESTION DE CATEGORIAS ===");
+        System.out.println("1 - Alta de categoria");
+        System.out.println("2 - Modificar categoria");
+        System.out.println("3 - Baja logica de categoria");
+        System.out.println("4 - Listar categorias activas");
+        System.out.println("0 - Volver al menu principal");
+        System.out.print("Ingrese una opcion: ");
+
+        opcionCategoria = Integer.parseInt(sc.nextLine());
+
+        switch (opcionCategoria) {
+
+            case 1:
+
+                System.out.println("\n--- ALTA DE CATEGORIA ---");
+
+                // ACA DESPUES VAMOS A HACER EL ALTA
+
+                break;
+
+            case 2:
+
+                System.out.println("\n--- MODIFICAR CATEGORIA ---");
+
+                // ACA DESPUES VAMOS A HACER LA MODIFICACION
+
+                break;
+
+            case 3:
+
+                System.out.println("\n--- BAJA LOGICA DE CATEGORIA ---");
+
+                // ACA DESPUES VAMOS A HACER LA BAJA LOGICA
+
+                break;
+
+            case 4:
+
+                System.out.println("\n--- LISTADO DE CATEGORIAS ACTIVAS ---");
+
+                // ACA DESPUES VAMOS A LISTAR
+
+                break;
+
+            case 0:
+
+                System.out.println("Volviendo al menu principal...");
+                break;
+
+            default:
+
+                System.out.println("Opcion invalida");
+        }
+
+    } while (opcionCategoria != 0);
+
+    break;
+
+    case 2:
+
+    int opcionProducto;
+
+    do {
+
+        System.out.println("\n=== GESTION DE PRODUCTOS ===");
+        System.out.println("1 - Alta de producto");
+        System.out.println("2 - Modificar producto");
+        System.out.println("3 - Baja logica de producto");
+        System.out.println("4 - Listar productos activos");
+        System.out.println("0 - Volver al menu principal");
+        System.out.print("Ingrese una opcion: ");
+
+        opcionProducto = Integer.parseInt(sc.nextLine());
+
+        switch (opcionProducto) {
+
+            case 1:
+
+                System.out.println("\n--- ALTA DE PRODUCTO ---");
+
+                // ACA DESPUES VAMOS A HACER EL ALTA
+
+                break;
+
+            case 2:
+
+                System.out.println("\n--- MODIFICAR PRODUCTO ---");
+
+                // ACA DESPUES VAMOS A HACER LA MODIFICACION
+
+                break;
+
+            case 3:
+
+                System.out.println("\n--- BAJA LOGICA DE PRODUCTO ---");
+
+                // ACA DESPUES VAMOS A HACER LA BAJA LOGICA
+
+                break;
+
+            case 4:
+
+                System.out.println("\n--- LISTADO DE PRODUCTOS ACTIVOS ---");
+
+                // ACA DESPUES VAMOS A LISTAR
+
+                break;
+
+            case 0:
+
+                System.out.println("Volviendo al menu principal...");
+                break;
+
+            default:
+
+                System.out.println("Opcion invalida");
+        }
+
+    } while (opcionProducto != 0);
+
+    break;
+
+        case 3:
+
+            int opcionReporte;
 
             do {
 
-                System.out.println("\n===== MENU =====");
-                System.out.println("1 - Listar productos");
-                System.out.println("2 - Buscar producto por nombre");
-                System.out.println("3 - Buscar productos con stock menor a");
-                System.out.println("4 - Eliminar producto logicamente");
-                System.out.println("0 - Salir");
+                System.out.println("\n=== REPORTES ===");
+                System.out.println("1 - Productos por categoria (JPQL)");
+                System.out.println("0 - Volver al menu principal");
                 System.out.print("Ingrese una opcion: ");
 
-                if (sc.hasNextInt()) {
+                opcionReporte = Integer.parseInt(sc.nextLine());
 
-                    opcion = sc.nextInt();
-                    sc.nextLine();
-
-                } else {
-
-                    System.out.println("Ingrese un numero valido");
-                    sc.nextLine();
-                    opcion = -1;
-                }
-
-                switch (opcion) {
+                switch (opcionReporte) {
 
                     case 1:
 
-                        List<Producto> productos =
-                                productoRepository.listarActivos();
+                        System.out.println("\n--- PRODUCTOS POR CATEGORIA (JPQL) ---");
 
-                        System.out.println("\nPRODUCTOS ACTIVOS:");
+                // ACA DESPUES VAMOS A HACER
+                // LA CONSULTA JPQL
 
-                        for (Producto p : productos) {
-
-                            System.out.println(
-                                    p.getId() + " - " +
-                                            p.getNombre() + " - $" +
-                                            p.getPrecio()
-                            );
-                        }
-
-                        break;
-
-                    case 2:
-
-                        System.out.print("Ingrese nombre a buscar: ");
-                        String nombre = sc.nextLine();
-
-                        List<Producto> productosNombre =
-                                productoRepository.buscarPorNombre(nombre);
-
-                        System.out.println("\nRESULTADOS:");
-
-                        for (Producto p : productosNombre) {
-
-                            System.out.println(
-                                    p.getId() + " - " +
-                                            p.getNombre()
-                            );
-                        }
-
-                        break;
-
-                    case 3:
-
-                        System.out.print("Ingrese stock maximo: ");
-
-                        int stock = sc.nextInt();
-                        sc.nextLine();
-
-                        List<Producto> productosStock =
-                                productoRepository.buscarConStockMenorA(stock);
-
-                        System.out.println("\nPRODUCTOS EN BAJO STOCK:");
-
-                        for (Producto p : productosStock) {
-
-                            System.out.println(
-                                    p.getNombre() +
-                                            " - Stock: " +
-                                            p.getStock()
-                            );
-                        }
-
-                        break;
-
-                    case 4:
-
-                        System.out.print("Ingrese ID del producto a eliminar: ");
-
-                        Long idEliminar = sc.nextLong();
-                        sc.nextLine();
-
-                        boolean eliminado =
-                                productoRepository.eliminarLogico(idEliminar);
-
-                        if (eliminado) {
-
-                            System.out.println("Producto eliminado logicamente");
-
-                        } else {
-
-                            System.out.println("Producto no encontrado");
-                        }
-
-                        break;
+                break;
 
                     case 0:
 
-                        System.out.println("Programa finalizado");
+                        System.out.println("Volviendo al menu principal...");
                         break;
 
-                    default:
+            default:
 
-                        System.out.println("Opcion invalida");
-                }
+                System.out.println("Opcion invalida");
+        }
 
-            } while (opcion != 0);
+    } while (opcionReporte != 0);
+
+    break;
+
+        case 0:
+
+            System.out.println("Programa finalizado");
+            break;
+
+        default:
+
+            System.out.println("Opcion invalida");
+    }
+
+} while (opcionPrincipal != 0);
 
         } catch (Exception e) {
 
