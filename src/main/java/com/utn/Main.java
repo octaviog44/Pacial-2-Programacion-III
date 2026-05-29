@@ -412,33 +412,124 @@ do {
 
             case 1:
 
-                System.out.println("\n--- ALTA DE PRODUCTO ---");
+                System.out.print("Ingrese nombre del producto: ");
+                String nombreProducto = sc.nextLine();
 
-                // ACA DESPUES VAMOS A HACER EL ALTA
+                System.out.print("Ingrese precio: ");
+                Double precioProducto = sc.nextDouble();
+
+                System.out.print("Ingrese stock: ");
+                int stockProducto = sc.nextInt();
+
+                System.out.print("Ingrese ID de la categoria: ");
+                Long idCategoria = sc.nextLong();
+                sc.nextLine();
+
+                Categoria categoriaProducto =
+                        categoriaRepository.buscarPorId(idCategoria).orElse(null);
+
+                if (categoriaProducto != null &&
+                        !Boolean.TRUE.equals(categoriaProducto.getEliminado())) {
+
+                    Producto nuevoProducto = new Producto();
+
+                    nuevoProducto.setNombre(nombreProducto);
+                    nuevoProducto.setPrecio(precioProducto);
+                    nuevoProducto.setStock(stockProducto);
+                    nuevoProducto.setCategoria(categoriaProducto);
+
+                    productoRepository.guardar(nuevoProducto);
+
+                    System.out.println("Producto guardado correctamente");
+
+                } else {
+
+                    System.out.println("Categoria no encontrada");
+                }
 
                 break;
 
             case 2:
 
-                System.out.println("\n--- MODIFICAR PRODUCTO ---");
+                System.out.print("Ingrese ID del producto a modificar: ");
+                Long idProductoModificar = sc.nextLong();
+                sc.nextLine();
 
-                // ACA DESPUES VAMOS A HACER LA MODIFICACION
+                Producto productoModificar =
+                        productoRepository.buscarPorId(idProductoModificar).orElse(null);
+
+                if (productoModificar != null &&
+                        !Boolean.TRUE.equals(productoModificar.getEliminado())) {
+
+                    System.out.println("\nProducto encontrado:");
+                    System.out.println("Nombre actual: " + productoModificar.getNombre());
+                    System.out.println("Precio actual: $" + productoModificar.getPrecio());
+                    System.out.println("Stock actual: " + productoModificar.getStock());
+
+                    System.out.print("Nuevo nombre: ");
+                    productoModificar.setNombre(sc.nextLine());
+
+                    System.out.print("Nuevo precio: ");
+                    productoModificar.setPrecio(sc.nextDouble());
+
+                    System.out.print("Nuevo stock: ");
+                    productoModificar.setStock(sc.nextInt());
+                    sc.nextLine();
+
+                    productoRepository.guardar(productoModificar);
+
+                    System.out.println("Producto modificado correctamente");
+
+                } else {
+
+                    System.out.println("Producto no encontrado");
+                }
 
                 break;
 
             case 3:
 
-                System.out.println("\n--- BAJA LOGICA DE PRODUCTO ---");
+                System.out.print("Ingrese ID del producto a eliminar: ");
+                Long idProductoEliminar = sc.nextLong();
+                sc.nextLine();
 
-                // ACA DESPUES VAMOS A HACER LA BAJA LOGICA
+                boolean eliminadoProducto =
+                        productoRepository.eliminarLogico(idProductoEliminar);
+
+                if (eliminadoProducto) {
+
+                    System.out.println("Producto eliminado logicamente");
+
+                } else {
+
+                    System.out.println("Producto no encontrado");
+                }
 
                 break;
 
             case 4:
 
-                System.out.println("\n--- LISTADO DE PRODUCTOS ACTIVOS ---");
+                List<Producto> productosActivos =
+                        productoRepository.listarActivos();
 
-                // ACA DESPUES VAMOS A LISTAR
+                if (productosActivos.isEmpty()) {
+
+                    System.out.println("No hay productos activos");
+
+                } else {
+
+                    System.out.println("\n===== PRODUCTOS ACTIVOS =====");
+
+                    for (Producto p : productosActivos) {
+
+                        System.out.println(
+                                "ID: " + p.getId() +
+                                " | Nombre: " + p.getNombre() +
+                                " | Precio: $" + p.getPrecio() +
+                                " | Stock: " + p.getStock()
+                        );
+                    }
+                }
 
                 break;
 
