@@ -298,31 +298,83 @@ do {
 
                 System.out.println("\n--- ALTA DE CATEGORIA ---");
 
-                // ACA DESPUES VAMOS A HACER EL ALTA
+                System.out.print("Ingrese nombre de la categoria: ");
+                String nombreCategoria = sc.nextLine();
 
+                Categoria nuevaCategoria = new Categoria();
+                nuevaCategoria.setNombre(nombreCategoria);
+
+                categoriaRepository.guardar(nuevaCategoria);
+
+                System.out.println("Categoria creada correctamente");
+                
                 break;
 
             case 2:
 
-                System.out.println("\n--- MODIFICAR CATEGORIA ---");
+                System.out.print("Ingrese ID de la categoria a modificar: ");
+                Long idModificar = sc.nextLong();
+                sc.nextLine();
 
-                // ACA DESPUES VAMOS A HACER LA MODIFICACION
+                Categoria categoriaModificar =
+                        categoriaRepository.buscarPorId(idModificar).orElse(null);
+
+                if (categoriaModificar != null &&
+                        !categoriaModificar.getEliminado()) {
+
+                    System.out.print("Ingrese nuevo nombre: ");
+                    String nuevoNombre = sc.nextLine();
+
+                    categoriaModificar.setNombre(nuevoNombre);
+
+                    categoriaRepository.guardar(categoriaModificar);
+
+                    System.out.println("Categoria modificada correctamente");
+
+                } else {
+
+                    System.out.println("Categoria no encontrada");
+                }
 
                 break;
 
             case 3:
 
-                System.out.println("\n--- BAJA LOGICA DE CATEGORIA ---");
+                System.out.print("Ingrese ID de la categoria a eliminar: ");
+                Long idEliminarCategoria = sc.nextLong();
+                sc.nextLine();
 
-                // ACA DESPUES VAMOS A HACER LA BAJA LOGICA
+                Categoria categoriaEliminar =
+                        categoriaRepository.buscarPorId(idEliminarCategoria).orElse(null);
 
-                break;
+                if (categoriaEliminar != null &&
+                        !categoriaEliminar.getEliminado()) {
+
+                    categoriaRepository.eliminarLogico(idEliminarCategoria);
+
+                    System.out.println("Categoria eliminada logicamente");
+
+                } else {
+
+                    System.out.println("Categoria no encontrada");
+                }
+
+                break;                  
 
             case 4:
 
-                System.out.println("\n--- LISTADO DE CATEGORIAS ACTIVAS ---");
+                List<Categoria> categorias =
+                        categoriaRepository.listarActivos();
 
-                // ACA DESPUES VAMOS A LISTAR
+                System.out.println("\n===== CATEGORIAS ACTIVAS =====");
+
+                for (Categoria c : categorias) {
+
+                    System.out.println(
+                            c.getId() + " - " +
+                            c.getNombre()
+                    );
+                }
 
                 break;
 
