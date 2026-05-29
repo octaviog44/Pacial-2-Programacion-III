@@ -32,4 +32,15 @@ public class ProductoRepository extends BaseRepository<Producto> {
                 .setParameter("stock", stock)
                 .getResultList();
     }
+
+    // BUSCAR PRODUCTOS POR CATEGORIA
+    public List<Producto> buscarPorCategoria(Long categoriaId) {
+
+        return em.createQuery(
+                "FROM Producto p WHERE p.categoria.id = :categoriaId AND p.eliminado = false",
+                Producto.class
+        )
+                .setParameter("categoriaId", categoriaId)
+                .getResultList();
+    }
 }

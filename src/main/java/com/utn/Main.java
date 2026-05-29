@@ -5,9 +5,10 @@ import com.utn.entities.*;
 import com.utn.repositories.CategoriaRepository;
 import com.utn.repositories.ProductoRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -17,19 +18,20 @@ public class Main {
                 .getEntityManagerFactory()
                 .createEntityManager();
 
-        EntityTransaction tx = em.getTransaction();
-
         CategoriaRepository categoriaRepository =
                 new CategoriaRepository(em);
 
         ProductoRepository productoRepository =
                 new ProductoRepository(em);
 
+        Scanner sc = new Scanner(System.in);
+
         try {
 
-            tx.begin();
-
+            // =========================
             // CATEGORIAS
+            // =========================
+
             Categoria bebidas = new Categoria();
             bebidas.setNombre("Bebidas");
 
@@ -39,11 +41,14 @@ public class Main {
             Categoria hamburguesas = new Categoria();
             hamburguesas.setNombre("Hamburguesas");
 
-            categoriaRepository.guardar(bebidas);
-            categoriaRepository.guardar(pizzas);
-            categoriaRepository.guardar(hamburguesas);
+            bebidas = categoriaRepository.guardar(bebidas);
+            pizzas = categoriaRepository.guardar(pizzas);
+            hamburguesas = categoriaRepository.guardar(hamburguesas);
 
+            // =========================
             // PRODUCTOS
+            // =========================
+
             Producto p1 = new Producto();
             p1.setNombre("Coca Cola");
             p1.setPrecio(2500.0);
@@ -104,18 +109,21 @@ public class Main {
             p10.setStock(25);
             p10.setCategoria(bebidas);
 
-            productoRepository.guardar(p1);
-            productoRepository.guardar(p2);
-            productoRepository.guardar(p3);
-            productoRepository.guardar(p4);
-            productoRepository.guardar(p5);
-            productoRepository.guardar(p6);
-            productoRepository.guardar(p7);
-            productoRepository.guardar(p8);
-            productoRepository.guardar(p9);
-            productoRepository.guardar(p10);
+            p1 = productoRepository.guardar(p1);
+            p2 = productoRepository.guardar(p2);
+            p3 = productoRepository.guardar(p3);
+            p4 = productoRepository.guardar(p4);
+            p5 = productoRepository.guardar(p5);
+            p6 = productoRepository.guardar(p6);
+            p7 = productoRepository.guardar(p7);
+            p8 = productoRepository.guardar(p8);
+            p9 = productoRepository.guardar(p9);
+            p10 = productoRepository.guardar(p10);
 
+            // =========================
             // USUARIOS
+            // =========================
+
             Usuario u1 = new Usuario();
             u1.setNombre("Octavio");
             u1.setEmail("octa@gmail.com");
@@ -124,10 +132,15 @@ public class Main {
             u2.setNombre("Jorge");
             u2.setEmail("jorge@gmail.com");
 
+            em.getTransaction().begin();
+
             em.persist(u1);
             em.persist(u2);
 
+            // =========================
             // PEDIDOS
+            // =========================
+
             Pedido pedido1 = new Pedido();
             pedido1.setFecha(LocalDate.now());
             pedido1.setUsuario(u1);
@@ -144,7 +157,10 @@ public class Main {
             em.persist(pedido2);
             em.persist(pedido3);
 
+            // =========================
             // DETALLES
+            // =========================
+
             DetallePedido d1 = new DetallePedido();
             d1.setCantidad(2);
             d1.setPedido(pedido1);
@@ -182,20 +198,31 @@ public class Main {
             em.persist(d5);
             em.persist(d6);
 
+            em.getTransaction().commit();
+
+            // =========================
             // UPDATE
+            // =========================
+
             p1.setPrecio(3000.0);
             p4.setStock(20);
 
             productoRepository.guardar(p1);
             productoRepository.guardar(p4);
 
-            // BUSCAR POR ID
+            // =========================
+            // BUSQUEDA POR ID
+            // =========================
+
             Usuario usuarioBuscado = em.find(Usuario.class, u1.getId());
 
-            System.out.println("BUSQUEDA POR ID");
+            System.out.println("\nBUSQUEDA POR ID");
             System.out.println(usuarioBuscado);
 
-            // BUSCAR POR MAIL
+            // =========================
+            // BUSQUEDA POR MAIL
+            // =========================
+
             try {
 
                 Usuario usuarioMail = em.createQuery(
@@ -205,15 +232,18 @@ public class Main {
                         .setParameter("mail", "octa@gmail.com")
                         .getSingleResult();
 
-                System.out.println("BUSQUEDA POR MAIL");
+                System.out.println("\nBUSQUEDA POR MAIL");
                 System.out.println(usuarioMail);
 
             } catch (Exception e) {
 
-                System.out.println("No se encontró usuario con ese mail");
+                System.out.println("No se encontro usuario con ese mail");
             }
 
+            // =========================
             // DELETE LOGICO
+            // =========================
+
             Producto productoEliminar = new Producto();
 
             productoEliminar.setNombre("Producto Temporal");
@@ -221,22 +251,144 @@ public class Main {
             productoEliminar.setStock(1);
             productoEliminar.setCategoria(bebidas);
 
-            productoRepository.guardar(productoEliminar);
+            productoEliminar = productoRepository.guardar(productoEliminar);
 
             productoRepository.eliminarLogico(productoEliminar.getId());
 
-            tx.commit();
+            System.out.println("\nTRANSACCION REALIZADA CON EXITO");
 
-            System.out.println("TRANSACCION REALIZADA CON EXITO");
+            // =========================
+            // MENU
+            // =========================
+
+            int opcion = -1;
+
+            do {
+
+                System.out.println("\n===== MENU =====");
+                System.out.println("1 - Listar productos");
+                System.out.println("2 - Buscar producto por nombre");
+                System.out.println("3 - Buscar productos con stock menor a");
+                System.out.println("4 - Eliminar producto logicamente");
+                System.out.println("0 - Salir");
+                System.out.print("Ingrese una opcion: ");
+
+                if (sc.hasNextInt()) {
+
+                    opcion = sc.nextInt();
+                    sc.nextLine();
+
+                } else {
+
+                    System.out.println("Ingrese un numero valido");
+                    sc.nextLine();
+                    opcion = -1;
+                }
+
+                switch (opcion) {
+
+                    case 1:
+
+                        List<Producto> productos =
+                                productoRepository.listarActivos();
+
+                        System.out.println("\nPRODUCTOS ACTIVOS:");
+
+                        for (Producto p : productos) {
+
+                            System.out.println(
+                                    p.getId() + " - " +
+                                            p.getNombre() + " - $" +
+                                            p.getPrecio()
+                            );
+                        }
+
+                        break;
+
+                    case 2:
+
+                        System.out.print("Ingrese nombre a buscar: ");
+                        String nombre = sc.nextLine();
+
+                        List<Producto> productosNombre =
+                                productoRepository.buscarPorNombre(nombre);
+
+                        System.out.println("\nRESULTADOS:");
+
+                        for (Producto p : productosNombre) {
+
+                            System.out.println(
+                                    p.getId() + " - " +
+                                            p.getNombre()
+                            );
+                        }
+
+                        break;
+
+                    case 3:
+
+                        System.out.print("Ingrese stock maximo: ");
+
+                        int stock = sc.nextInt();
+                        sc.nextLine();
+
+                        List<Producto> productosStock =
+                                productoRepository.buscarConStockMenorA(stock);
+
+                        System.out.println("\nPRODUCTOS EN BAJO STOCK:");
+
+                        for (Producto p : productosStock) {
+
+                            System.out.println(
+                                    p.getNombre() +
+                                            " - Stock: " +
+                                            p.getStock()
+                            );
+                        }
+
+                        break;
+
+                    case 4:
+
+                        System.out.print("Ingrese ID del producto a eliminar: ");
+
+                        Long idEliminar = sc.nextLong();
+                        sc.nextLine();
+
+                        boolean eliminado =
+                                productoRepository.eliminarLogico(idEliminar);
+
+                        if (eliminado) {
+
+                            System.out.println("Producto eliminado logicamente");
+
+                        } else {
+
+                            System.out.println("Producto no encontrado");
+                        }
+
+                        break;
+
+                    case 0:
+
+                        System.out.println("Programa finalizado");
+                        break;
+
+                    default:
+
+                        System.out.println("Opcion invalida");
+                }
+
+            } while (opcion != 0);
 
         } catch (Exception e) {
 
-            tx.rollback();
             e.printStackTrace();
 
         } finally {
 
             em.close();
+            sc.close();
         }
     }
 }
