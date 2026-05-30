@@ -562,14 +562,34 @@ do {
 
                 switch (opcionReporte) {
 
-                    case 1:
+        case 1:
 
-                        System.out.println("\n--- PRODUCTOS POR CATEGORIA (JPQL) ---");
+            System.out.print("Ingrese nombre de la categoria: ");
+            String categoriaBuscada = sc.nextLine();
 
-                // ACA DESPUES VAMOS A HACER
-                // LA CONSULTA JPQL
+            List<Producto> productosCategoria =
+                    productoRepository.buscarPorCategoria(categoriaBuscada);
 
-                break;
+            if (productosCategoria.isEmpty()) {
+
+                System.out.println("No se encontraron productos para esa categoria");
+
+            } else {
+
+                System.out.println("\n===== PRODUCTOS DE LA CATEGORIA =====");
+
+                for (Producto p : productosCategoria) {
+
+                    System.out.println(
+                            "ID: " + p.getId() +
+                            " | Nombre: " + p.getNombre() +
+                            " | Precio: $" + p.getPrecio() +
+                            " | Stock: " + p.getStock()
+                    );
+                }
+            }
+
+            break;
 
                     case 0:
 

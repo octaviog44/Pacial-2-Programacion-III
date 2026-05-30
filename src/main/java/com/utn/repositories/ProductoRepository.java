@@ -43,4 +43,16 @@ public class ProductoRepository extends BaseRepository<Producto> {
                 .setParameter("categoriaId", categoriaId)
                 .getResultList();
     }
-}
+
+    public List<Producto> buscarPorCategoria(String nombreCategoria) {
+
+    return em.createQuery(
+            "SELECT p FROM Producto p " +
+            "WHERE p.categoria.nombre = :categoria " +
+            "AND p.eliminado = false",
+            Producto.class)
+            .setParameter("categoria", nombreCategoria)
+            .getResultList();
+        }
+    }
+
