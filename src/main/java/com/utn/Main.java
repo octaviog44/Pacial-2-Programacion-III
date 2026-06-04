@@ -492,6 +492,34 @@ do {
                     productoModificar.setStock(sc.nextInt());
                     sc.nextLine();
 
+                    
+
+                    System.out.println("\nCategorias disponibles:");
+
+                    for (Categoria c : categoriaRepository.listarActivos()) {
+
+                        System.out.println(
+                                c.getId() + " - " + c.getNombre()
+                        );
+                    }
+
+                    System.out.print("Nuevo ID de categoria: ");
+                    Long idNuevaCategoria = sc.nextLong();
+                    sc.nextLine();
+
+                    Categoria nuevaCategoria =
+                            categoriaRepository.buscarPorId(idNuevaCategoria).orElse(null);
+
+                    if (nuevaCategoria != null && !nuevaCategoria.getEliminado()) {
+
+                        productoModificar.setCategoria(nuevaCategoria);
+
+                    } else {
+
+                        System.out.println("Categoria no encontrada");
+                        break;
+                    }
+
                     productoRepository.guardar(productoModificar);
 
                     System.out.println("Producto modificado correctamente");
@@ -542,7 +570,8 @@ do {
                                 "ID: " + p.getId() +
                                 " | Nombre: " + p.getNombre() +
                                 " | Precio: $" + p.getPrecio() +
-                                " | Stock: " + p.getStock()
+                                " | Stock: " + p.getStock() +
+                                " | Categoria: " + p.getCategoria().getNombre()
                         );
                     }
                 }
