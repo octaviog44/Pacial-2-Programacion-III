@@ -615,9 +615,24 @@ do {
             List<Producto> productosCategoria =
                     productoRepository.buscarPorCategoria(categoriaBuscada);
 
-            if (productosCategoria.isEmpty()) {
+            boolean categoriaExiste = false;
 
-                System.out.println("No se encontraron productos para esa categoria");
+            for (Categoria c : categoriaRepository.listarActivos()) {
+
+                if (c.getNombre().equalsIgnoreCase(categoriaBuscada)) {
+
+                    categoriaExiste = true;
+                    break;
+                }
+            }
+
+            if (!categoriaExiste) {
+
+                System.out.println("La categoria ingresada no existe");
+
+            } else if (productosCategoria.isEmpty()) {
+
+                System.out.println("La categoria existe pero no tiene productos asociados");
 
             } else {
 
@@ -630,11 +645,11 @@ do {
                             " | Nombre: " + p.getNombre() +
                             " | Precio: $" + p.getPrecio() +
                             " | Stock: " + p.getStock()
-                    );
-                }
+                );
             }
+        }
 
-            break;
+        break;
 
                     case 0:
 
