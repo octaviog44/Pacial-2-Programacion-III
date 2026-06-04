@@ -28,7 +28,7 @@ public class Main {
 
         try {
 
-            // =========================
+           /*  // =========================
             // CATEGORIAS
             // =========================
 
@@ -259,8 +259,8 @@ public class Main {
             productoRepository.eliminarLogico(productoEliminar.getId());
 
             System.out.println("\nTRANSACCION REALIZADA CON EXITO");
-
-            // =========================
+ */
+// =========================
 // MENU PRINCIPAL
 // =========================
 
@@ -377,14 +377,19 @@ do {
                         categoriaRepository.listarActivos();
 
                 System.out.println("\n===== CATEGORIAS ACTIVAS =====");
+                if (categorias.isEmpty()) {
 
-                for (Categoria c : categorias) {
+                    System.out.println("No hay categorias activas");
 
-                    System.out.println(
+                } else {
+                    for (Categoria c : categorias) {
+
+                        System.out.println(
                             c.getId() + " - " +
                             c.getNombre() + " - " +
                             c.getDescripcion()
-                    );
+                        );
+                    }
                 }
 
                 break;
