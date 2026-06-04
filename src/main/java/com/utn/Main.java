@@ -34,12 +34,15 @@ public class Main {
 
             Categoria bebidas = new Categoria();
             bebidas.setNombre("Bebidas");
+            bebidas.setDescripcion("Gaseosas, aguas y jugos");
 
             Categoria pizzas = new Categoria();
             pizzas.setNombre("Pizzas");
+            pizzas.setDescripcion("Pizzas de distintos sabores");
 
             Categoria hamburguesas = new Categoria();
             hamburguesas.setNombre("Hamburguesas");
+            hamburguesas.setDescripcion("Hamburguesas simples, dobles y especiales");
 
             bebidas = categoriaRepository.guardar(bebidas);
             pizzas = categoriaRepository.guardar(pizzas);
@@ -300,9 +303,12 @@ do {
 
                 System.out.print("Ingrese nombre de la categoria: ");
                 String nombreCategoria = sc.nextLine();
+                System.out.print("Ingrese descripcion: ");
+                String descripcion = sc.nextLine();
 
                 Categoria nuevaCategoria = new Categoria();
                 nuevaCategoria.setNombre(nombreCategoria);
+                nuevaCategoria.setDescripcion(descripcion);
 
                 categoriaRepository.guardar(nuevaCategoria);
 
@@ -324,8 +330,12 @@ do {
 
                     System.out.print("Ingrese nuevo nombre: ");
                     String nuevoNombre = sc.nextLine();
+                    System.out.print("Ingrese nueva descripcion: ");
+                    String nuevaDescripcion = sc.nextLine();
 
+                    
                     categoriaModificar.setNombre(nuevoNombre);
+                    categoriaModificar.setDescripcion(nuevaDescripcion);
 
                     categoriaRepository.guardar(categoriaModificar);
 
@@ -372,7 +382,8 @@ do {
 
                     System.out.println(
                             c.getId() + " - " +
-                            c.getNombre()
+                            c.getNombre() + " - " +
+                            c.getDescripcion()
                     );
                 }
 
